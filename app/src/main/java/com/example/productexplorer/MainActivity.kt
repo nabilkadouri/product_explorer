@@ -1,5 +1,6 @@
 package com.example.productexplorer
 
+import android.R
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,10 +17,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.materialIcon
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,6 +65,7 @@ fun ProductDetailScreen(
                 .fillMaxWidth()
                 .padding(bottom = 16.dp)
         )
+
         ProductHeader(
             title =  product.title,
             brand = product.brand,
@@ -72,17 +79,57 @@ fun ProductDetailScreen(
                 .fillMaxWidth()
                 .padding(top = 16.dp)
         )
+
         ProductRating(
             rating = product.rating,
             modifier = Modifier.padding(top = 16.dp)
         )
-        Text(text = product.description)
 
-        Button(onClick = onAddToCartClick) {
-            Text(text = "Ajouter au panier")
-        }
+        ProductAvailabilityCard(
+            stock = product.stock,
+            shippingInformation = product.shippingInformation,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+
+        ProductDescription(
+            description = product.description,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+
+        ProductWarrantyField(
+            warrantyInformation = product.warrantyInformation,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
+
+        AddToCartButton(
+            onClick = onAddToCartClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        )
     }
+}
 
+@Composable
+fun ProductWarrantyField(
+    warrantyInformation: String,
+    modifier: Modifier = Modifier
+) {
+    OutlinedTextField(
+        value = warrantyInformation,
+        onValueChange = {},
+        readOnly = true,
+        label = {
+            Text(
+                text = "Garantie"
+            )
+        },
+        modifier = modifier
+    )
 }
 
 @Composable
@@ -117,7 +164,7 @@ fun ProductPriceCard(
 ) {
     Card(modifier = modifier) {
         Column(
-            modifier = modifier.padding(16.dp)
+            modifier = Modifier.padding(8.dp)
         ) {
             Text(
                 text = "$price €",
@@ -144,6 +191,34 @@ fun ProductImage(
 }
 
 @Composable
+fun ProductAvailabilityCard(
+    stock: Int,
+    shippingInformation: String,
+    modifier: Modifier = Modifier
+) {
+   Card(
+       modifier = modifier
+   ) {
+       Column(
+           modifier = Modifier.padding(16.dp)
+       ) {
+           Text(
+               text = "Disponibilité",
+               style = MaterialTheme.typography.titleMedium
+           )
+           Text(
+               text = "Stock : $stock unités",
+               style = MaterialTheme.typography.bodyMedium
+           )
+           Text(
+               text = shippingInformation,
+               style = MaterialTheme.typography.bodyMedium
+           )
+       }
+   }
+}
+
+@Composable
 fun ProductRating(
     rating: Double,
     modifier: Modifier = Modifier
@@ -158,8 +233,42 @@ fun ProductRating(
             modifier = Modifier.padding(start = 8.dp)
         )
     }
-
 }
+
+@Composable
+fun ProductDescription(
+    description: String,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = "Description",
+            style = MaterialTheme.typography.titleMedium
+        )
+        Text(
+            text = description,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(top = 4.dp)
+        )
+    }
+}
+
+@Composable
+fun AddToCartButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Text(
+            text = "Ajouter au panier"
+        )
+    }
+}
+
+
 
 @Preview(showBackground = true)
 @Composable
@@ -171,3 +280,15 @@ fun ProductDetailScreenPreview() {
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun ProductDetailScreenOutOfStockPreview() {
+    ProductExplorerTheme {
+        ProductDetailScreen(
+            product = sampleProductOutOfStock(),
+            onAddToCartClick = {}
+        )
+    }
+}
+
