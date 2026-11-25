@@ -31,19 +31,15 @@ fun ProductHomeScreen(
     ) {
         HomeHeader()
         Spacer(modifier = Modifier.height(24.dp))
-
         SearchPreviewBar()
         Spacer(modifier = Modifier.height(24.dp))
-
         FeatureProductSection(
             product = featureProduct,
             onClick = onFeatureProductClick
         )
         Spacer(modifier = Modifier.height(24.dp))
-
         CategoriesSection()
         Spacer(modifier = Modifier.height(24.dp))
-
         DailyOfferBox()
     }
 }

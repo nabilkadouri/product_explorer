@@ -29,7 +29,7 @@ fun ProductDetailScreen(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(10.dp)
+            .padding(16.dp)
     ) {
         ProductImage(
             productTitle = product.title,
@@ -241,7 +241,6 @@ fun AddToCartButton(
 }
 
 
-
 @Preview(showBackground = true)
 @Composable
 fun ProductDetailScreenPreview() {
@@ -258,7 +257,7 @@ fun ProductDetailScreenPreview() {
 fun ProductDetailScreenOutOfStockPreview() {
     ProductExplorerTheme {
         ProductDetailScreen(
-            product = sampleProduct(),
+            product = sampleProductOutOfStock(),
             onAddToCartClick = {}
         )
     }
