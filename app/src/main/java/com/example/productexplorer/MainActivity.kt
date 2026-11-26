@@ -15,9 +15,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                ProductCatalogScreen(
+                ProductCatalogContainer(
                     products = sampleProducts(),
-                    onProductClick = { /* Action à ajouter plus tard */ },
+                    categories = sampleCategories(),
+                    onProductClick = {
+                        // Plus tard : ouvrir le détail du produit
+                    },
                     modifier = Modifier.padding(innerPadding)
                 )
             }
