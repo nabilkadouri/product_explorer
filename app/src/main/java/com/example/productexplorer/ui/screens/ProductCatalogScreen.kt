@@ -19,6 +19,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,14 +53,16 @@ fun ProductCatalogContainer(
     modifier: Modifier = Modifier,
     viewModel: ProductCatalogViewModel = viewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     ProductCatalogScreen(
-        products = viewModel.filteredProducts,
-        categories = viewModel.categories,
-        searchQuery = viewModel.searchQuery,
+        products = uiState.products,
+        categories = uiState.categories,
+        searchQuery = uiState.searchQuery,
         onSearchQueryChange = viewModel::onSearchQueryChange,
-        showOnlyInStock = viewModel.showOnlyInStock,
+        showOnlyInStock = uiState.showOnlyInStock,
         onToggleStockFilter = viewModel::onToggleStockFilter,
-        favoriteProductIds = viewModel.favoriteProductIds,
+        favoriteProductIds = uiState.favoriteProductIds,
         onFavoriteClick = viewModel::onFavoriteClick,
         onProductClick = onProductClick,
         modifier = modifier
