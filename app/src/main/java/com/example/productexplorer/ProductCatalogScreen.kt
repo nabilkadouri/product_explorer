@@ -33,7 +33,6 @@ import com.example.productexplorer.ui.theme.ProductExplorerTheme
 fun sampleCategories(): List<String> {
     return listOf("Smartphone", "Audio", "Wearables", "Maison")
 }
-
 @Composable
 fun CategoryRow(
     categories: List<String>,
@@ -48,7 +47,6 @@ fun CategoryRow(
         }
     }
 }
-
 @Composable
 fun ProductCatalogScreen(
     products: List<ProductUi>,
@@ -63,6 +61,10 @@ fun ProductCatalogScreen(
         mutableStateOf(false)
     }
 
+    var favoriteProductIds by rememberSaveable {
+        mutableStateOf(listOf<Int>())
+    }
+
     val filteredProducts = remember(products, searchQuery, showOnlyInStock) {
         products.filter { product ->
             val matchesSearch =
@@ -74,6 +76,14 @@ fun ProductCatalogScreen(
                 !showOnlyInStock || product.stock > 0
 
             matchesSearch && matchesStock
+        }
+    }
+
+    fun toggleFavorite(productId: Int) {
+        favoriteProductIds = if (favoriteProductIds.contains(productId)) {
+            favoriteProductIds - productId
+        } else {
+            favoriteProductIds + productId
         }
     }
 
@@ -147,9 +157,6 @@ fun ProductCatalogScreen(
     }
 }
 
-
-
-
 @Composable
 fun ProductListItem(
     product: ProductUi,
@@ -192,10 +199,6 @@ fun ProductListItem(
         }
     }
 }
-
-
-
-
 
 @Preview(showBackground = true)
 @Composable
