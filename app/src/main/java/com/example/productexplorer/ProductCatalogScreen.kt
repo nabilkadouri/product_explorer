@@ -21,13 +21,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.productexplorer.ui.theme.ProductExplorerTheme
-import androidx.compose.runtime.remember
 
 
 fun sampleCategories(): List<String> {
@@ -59,11 +59,21 @@ fun ProductCatalogScreen(
         mutableStateOf("")
     }
 
-    val filteredProducts = remember(products, searchQuery) {
+    var showOnlyInStock by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    val filteredProducts = remember(products, searchQuery, showOnlyInStock) {
         products.filter { product ->
-            product.title.contains(searchQuery, ignoreCase = true) ||
-                    product.brand.contains(searchQuery, ignoreCase = true) ||
-                    product.category.contains(searchQuery, ignoreCase = true)
+            val matchesSearch =
+                product.title.contains(searchQuery, ignoreCase = true) ||
+                        product.brand.contains(searchQuery, ignoreCase = true) ||
+                        product.category.contains(searchQuery, ignoreCase = true)
+
+            val matchesStock =
+                !showOnlyInStock || product.stock > 0
+
+            matchesSearch && matchesStock
         }
     }
 
@@ -98,6 +108,21 @@ fun ProductCatalogScreen(
                 },
                 modifier = Modifier.fillMaxWidth()
             )
+        }
+        item {
+            Button(
+                onClick = {
+                    showOnlyInStock = !showOnlyInStock
+                }
+            ) {
+                Text(
+                    text = if (showOnlyInStock) {
+                        "Afficher tous les produits"
+                    } else {
+                        "Afficher uniquement les produits en stock"
+                    }
+                )
+            }
         }
         item {
             CategoryRow(categories = sampleCategories())
