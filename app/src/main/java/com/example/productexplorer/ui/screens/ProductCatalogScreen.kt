@@ -19,19 +19,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.productexplorer.data.ProductUi
 import com.example.productexplorer.data.sampleCategories
 import com.example.productexplorer.data.sampleProducts
 import com.example.productexplorer.ui.theme.ProductExplorerTheme
-
+import com.example.productexplorer.ui.viewmodel.ProductCatalogViewModel
 
 
 @Composable
@@ -51,60 +47,19 @@ fun CategoryRow(
 
 @Composable
 fun ProductCatalogContainer(
-    products: List<ProductUi>,
-    categories: List<String>,
     onProductClick: (ProductUi) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: ProductCatalogViewModel = viewModel()
 ) {
-    var searchQuery by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var showOnlyInStock by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var favoriteProductIds by rememberSaveable {
-        mutableStateOf(listOf<Int>())
-    }
-
-    val filteredProducts = remember(products, searchQuery, showOnlyInStock) {
-        products.filter { product ->
-            val matchesSearch =
-                product.title.contains(searchQuery, ignoreCase = true) ||
-                        product.brand.contains(searchQuery, ignoreCase = true) ||
-                        product.category.contains(searchQuery, ignoreCase = true)
-
-            val matchesStock =
-                !showOnlyInStock || product.stock > 0
-
-            matchesSearch && matchesStock
-        }
-    }
-
-    fun toggleFavorite(productId: Int) {
-        favoriteProductIds = if (favoriteProductIds.contains(productId)) {
-            favoriteProductIds - productId
-        } else {
-            favoriteProductIds + productId
-        }
-    }
-
     ProductCatalogScreen(
-        products = filteredProducts,
-        categories = categories,
-        searchQuery = searchQuery,
-        onSearchQueryChange = { newValue ->
-            searchQuery = newValue
-        },
-        showOnlyInStock = showOnlyInStock,
-        onToggleStockFilter = {
-            showOnlyInStock = !showOnlyInStock
-        },
-        favoriteProductIds = favoriteProductIds,
-        onFavoriteClick = { productId ->
-            toggleFavorite(productId)
-        },
+        products = viewModel.filteredProducts,
+        categories = viewModel.categories,
+        searchQuery = viewModel.searchQuery,
+        onSearchQueryChange = viewModel::onSearchQueryChange,
+        showOnlyInStock = viewModel.showOnlyInStock,
+        onToggleStockFilter = viewModel::onToggleStockFilter,
+        favoriteProductIds = viewModel.favoriteProductIds,
+        onFavoriteClick = viewModel::onFavoriteClick,
         onProductClick = onProductClick,
         modifier = modifier
     )
@@ -254,11 +209,17 @@ fun ProductListItem(
     heightDp = 1000
 )
 @Composable
-fun ProductCatalogContainerLightPreview() {
+fun ProductCatalogScreenLightPreview() {
     ProductExplorerTheme(darkTheme = false) {
-        ProductCatalogContainer(
+        ProductCatalogScreen(
             products = sampleProducts(),
             categories = sampleCategories(),
+            searchQuery = "",
+            onSearchQueryChange = {},
+            showOnlyInStock = false,
+            onToggleStockFilter = {},
+            favoriteProductIds = listOf(1),
+            onFavoriteClick = {},
             onProductClick = {}
         )
     }
@@ -270,32 +231,16 @@ fun ProductCatalogContainerLightPreview() {
     heightDp = 1000
 )
 @Composable
-fun ProductCatalogContainerDarkPreview() {
+fun ProductCatalogScreenDarkPreview() {
     ProductExplorerTheme(darkTheme = true) {
-        ProductCatalogContainer(
-            products = sampleProducts(),
-            categories = sampleCategories(),
-            onProductClick = {}
-        )
-    }
-}
-
-@Preview(
-    showBackground = true,
-    name = "Catalogue - Stateless (favori + filtre)",
-    heightDp = 1000
-)
-@Composable
-fun ProductCatalogScreenStatelessPreview() {
-    ProductExplorerTheme {
         ProductCatalogScreen(
             products = sampleProducts(),
             categories = sampleCategories(),
-            searchQuery = "",
+            searchQuery = "audio",
             onSearchQueryChange = {},
-            showOnlyInStock = false,
+            showOnlyInStock = true,
             onToggleStockFilter = {},
-            favoriteProductIds = listOf(1),
+            favoriteProductIds = listOf(2),
             onFavoriteClick = {},
             onProductClick = {}
         )

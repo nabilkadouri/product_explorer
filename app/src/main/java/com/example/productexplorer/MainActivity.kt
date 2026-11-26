@@ -19,8 +19,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                 ProductCatalogContainer(
-                    products = sampleProducts(),
-                    categories = sampleCategories(),
                     onProductClick = {
                         // Plus tard : ouvrir le détail du produit
                     },
