@@ -47,6 +47,51 @@ fun CategoryRow(
         }
     }
 }
+
+@Composable
+fun ProductCatalogContainer(
+    products: List<ProductUi>,
+    categories: List<String>,
+    onProductClick: (ProductUi) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var searchQuery by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    var showOnlyInStock by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    var favoriteProductIds by rememberSaveable {
+        mutableStateOf(listOf<Int>())
+    }
+
+    val filteredProducts = remember(products, searchQuery, showOnlyInStock) {
+        products.filter { product ->
+            val matchesSearch =
+                product.title.contains(searchQuery, ignoreCase = true) ||
+                        product.brand.contains(searchQuery, ignoreCase = true) ||
+                        product.category.contains(searchQuery, ignoreCase = true)
+
+            val matchesStock =
+                !showOnlyInStock || product.stock > 0
+
+            matchesSearch && matchesStock
+        }
+    }
+
+    fun toggleFavorite(productId: Int) {
+        favoriteProductIds = if (favoriteProductIds.contains(productId)) {
+            favoriteProductIds - productId
+        } else {
+            favoriteProductIds + productId
+        }
+    }
+
+    // Étape C : on appellera ProductCatalogScreen ici
+}
+
 @Composable
 fun ProductCatalogScreen(
     products: List<ProductUi>,
@@ -216,7 +261,7 @@ fun ProductListItem(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, heightDp = 1000)
 @Composable
 fun ProductCatalogScreenPreview() {
     ProductExplorerTheme() {
@@ -229,7 +274,8 @@ fun ProductCatalogScreenPreview() {
 
 @Preview(
     showBackground = true,
-    name = "Catalogue - Dark Theme"
+    name = "Catalogue - Dark Theme",
+    heightDp = 1000
 )
 @Composable
 fun ProductCatalogScreenDarkPreview() {
@@ -243,7 +289,8 @@ fun ProductCatalogScreenDarkPreview() {
 
 @Preview(
     showBackground = true,
-    name = "Catalogue - Light Theme"
+    name = "Catalogue - Light Theme",
+    heightDp = 1000
 )
 @Composable
 fun ProductCatalogScreenLightPreview() {
