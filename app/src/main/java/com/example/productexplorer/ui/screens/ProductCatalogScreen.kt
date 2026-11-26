@@ -1,4 +1,4 @@
-package com.example.productexplorer
+package com.example.productexplorer.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,12 +27,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.productexplorer.data.ProductUi
+import com.example.productexplorer.data.sampleCategories
+import com.example.productexplorer.data.sampleProducts
 import com.example.productexplorer.ui.theme.ProductExplorerTheme
 
 
-fun sampleCategories(): List<String> {
-    return listOf("Smartphone", "Audio", "Wearables", "Maison")
-}
+
 @Composable
 fun CategoryRow(
     categories: List<String>,

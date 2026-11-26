@@ -1,4 +1,4 @@
-package com.example.productexplorer
+package com.example.productexplorer.data
 
 data class ProductUi(
     val id: Int,
@@ -90,4 +90,7 @@ fun sampleProducts(): List<ProductUi> {
             shippingInformation = "Livraison estimée : 3 jours ouvrés"
         )
     )
+}
+fun sampleCategories(): List<String> {
+    return listOf("Smartphone", "Audio", "Wearables", "Maison")
 }

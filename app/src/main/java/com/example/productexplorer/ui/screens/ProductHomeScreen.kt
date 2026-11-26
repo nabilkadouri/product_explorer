@@ -1,4 +1,4 @@
-package com.example.productexplorer
+package com.example.productexplorer.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.productexplorer.data.ProductUi
+import com.example.productexplorer.data.sampleProduct
 import com.example.productexplorer.ui.theme.ProductExplorerTheme
 
 @Composable

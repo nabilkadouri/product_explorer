@@ -1,5 +1,6 @@
-package com.example.productexplorer
+package com.example.productexplorer.ui.screens
 
+import android.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.productexplorer.data.ProductUi
+import com.example.productexplorer.data.sampleProduct
+import com.example.productexplorer.data.sampleProductOutOfStock
 import com.example.productexplorer.ui.theme.ProductExplorerTheme
 
 @Composable
@@ -156,7 +160,7 @@ fun ProductImage(
     modifier: Modifier = Modifier
 ) {
     Image(
-        painter = painterResource(android.R.drawable.ic_menu_gallery),
+        painter = painterResource(R.drawable.ic_menu_gallery),
         contentDescription = "Image du produit $productTitle",
         modifier = modifier
     )
